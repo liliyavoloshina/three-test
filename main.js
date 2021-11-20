@@ -1,7 +1,7 @@
 import './style.css'
 
 import * as THREE from 'three'
-import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 // contaner
 const scene = new THREE.Scene()
 
@@ -21,17 +21,17 @@ camera.position.setZ(30)
 // draw
 renderer.render(scene, camera)
 
-const geometry = new THREE.TorusKnotGeometry( 10, 3, 100, 16 )
-const material = new THREE.MeshStandardMaterial( { color: 0xff6347 } )
+const geometry = new THREE.TorusKnotGeometry(10, 3, 100, 16)
+const material = new THREE.MeshStandardMaterial({ color: 0xff6347 })
 // const material = new THREE.MeshNormalMaterial( { color: 0xffff00 } )
-const torusKnot = new THREE.Mesh( geometry, material )
+const torusKnot = new THREE.Mesh(geometry, material)
 scene.add(torusKnot)
 
 const pointLight = new THREE.PointLight(0xffffff)
-pointLight.position.set(30,30,30)
+pointLight.position.set(30, 30, 30)
 
 const ambientLight = new THREE.AmbientLight(0xffffff)
-ambientLight.position.set(30,30,30)
+ambientLight.position.set(30, 30, 30)
 
 scene.add(pointLight, ambientLight)
 
@@ -41,7 +41,20 @@ scene.add(lightHelper, gridHelper)
 
 const controls = new OrbitControls(camera, renderer.domElement)
 
-function animate() {
+const addStar = () => {
+  const geometry = new THREE.SphereGeometry(0.25, 24, 24)
+  const material = new THREE.MeshStandardMaterial({ color: 0xffffff })
+  const star = new THREE.Mesh(geometry, material)
+
+  const [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(100))
+
+  star.position.set(x, y, z)
+  scene.add(star)
+}
+
+Array(200).fill().forEach(addStar)
+
+const animate = () => {
   requestAnimationFrame(animate)
   torusKnot.rotation.x += 0.01
   torusKnot.rotation.y += 0.001
